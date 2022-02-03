@@ -21,7 +21,7 @@ class LinkedList {
         return this;
     }
     // Adding a value to the beginngin of the list 
-    preprend(value){
+    prepend(value){
         const newNode = {
             value: value,
             next: null
@@ -54,16 +54,30 @@ class LinkedList {
             next: null
         }
         const leader = this.traverseToIndex(index-1)
+        // Referencing the next node
+        const holdingPointer = leader.next;
+        // Pointing to new node
+        leader.next = newNode;
+        // New node pointing to the next node
+        newNode.next = holdingPointer;
+        this.length++;
+        return this.printList();
     }
 
     traverseToIndex(index) {
         // check params
         let counter = 0;
-        let currentNode = this.head
+        let currentNode = this.head;
+        while(counter !== index) {
+            currentNode = currentNode.next;
+            counter++;
+        }
+        return currentNode;
     }
 }
 
 const myLinkedList = new LinkedList(10);
 myLinkedList.append(5);
 myLinkedList.append(16);
-myLinkedList.prepend(3);
+myLinkedList.prepend(1);
+myLinkedList.insert(2, 99);

@@ -1,10 +1,12 @@
 //  Linked List Example
 
-class LinkedList {
+class DoublyLinkedList {
     constructor(value){
         this.head = {
             value: value,
-            next: null
+            next: null,
+            // Doubling the list
+            prev: null
         }
         this.tail = this.head;
         this.length = 1;
@@ -13,8 +15,12 @@ class LinkedList {
     append(value) {
         const newNode = {
             value: value,
-            next: null
+            next: null,
+            // Doubling the list
+            prev: null
         }
+        // Doubling the list
+        newNode.prev = this.tail;
         this.tail.next = newNode;
         this.tail = newNode;
         this.length++;
@@ -24,9 +30,12 @@ class LinkedList {
     prepend(value){
         const newNode = {
             value: value,
-            next: null
+            next: null,
+            // Doubling the list
+            prev: null
         };
         newNode.next = this.head;
+        this.head.prev = newNode;
         this.head = newNode;
         this.length++;
         return this;
@@ -52,17 +61,21 @@ class LinkedList {
         }
         const newNode = {
             value: value,
-            next: null
+            next: null,
+            prev: null
         }
         // reference to the leader
         const leader = this.traverseToIndex(index-1)
         // Referencing the next node
-        const holdingPointer = leader.next;
+        const follower = leader.next;
         // Pointing to new node
         leader.next = newNode;
         // New node pointing to the next node
-        newNode.next = holdingPointer;
+        newNode.next = follower;
+        newNode.prev = follower;
+        follower.prev = newNode;
         this.length++;
+        console.log(this)
         return this.printList();
     }
 
@@ -79,6 +92,28 @@ class LinkedList {
         return this.printList();
     }
 
+    // Reversing the list 
+    reverse(){
+        // Checking if theres is only 1 on the list
+        if(!this.head.next){
+            return this.head;
+        }
+        // Referencing the first 3 nodes
+        let first = this.head;
+        let second = first.next;
+        while(second) {
+            const temp = second.next;
+            second.next = first;
+            first = second;
+            second = temp;
+        }
+        this.head.next = null;
+        this.head = first;
+        return this;
+
+
+    }
+
     traverseToIndex(index) {
         // check params
         let counter = 0;
@@ -91,15 +126,15 @@ class LinkedList {
     }
 }
 
-const myLinkedList = new LinkedList(10);
+const myLinkedList = new DoublyLinkedList(10);
 myLinkedList.append(5);
 myLinkedList.append(16);
 myLinkedList.prepend(1);
 myLinkedList.printList();
-myLinkedList.insert(2, 99);
-myLinkedList.insert(14, 88);
-myLinkedList.printList();
-myLinkedList.remove(2);
-myLinkedList.remove(2);
+myLinkedList.insert(1, 99);
+// myLinkedList.insert(14, 88);
+// myLinkedList.printList();
+// myLinkedList.remove(2);
+// myLinkedList.remove(2);
 
 // myLinkedList.remove();
